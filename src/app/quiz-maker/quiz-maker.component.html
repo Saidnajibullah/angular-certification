@@ -1,0 +1,18 @@
+<div class="container">
+  <div>
+    <app-auto-filter [filterData]="getCategoriesName()" (optionSelected)="onOptionSelected($event)"></app-auto-filter>
+  </div>
+  <div *ngIf="hasSubCategory"><app-auto-filter [filterData]="subCategories"></app-auto-filter></div>
+  <div>
+    <select #difficulty id="difficultySelect">
+      <option>Select difficulty</option>
+      <option>Easy</option>
+      <option>Medium</option>
+      <option>Hard</option>
+    </select>
+    <button class="primary" id="createBtn" (click)="createQuiz(difficulty.value)">Create</button>
+  </div>
+</div>
+<div>
+   <app-quiz [questions]="questions$ | async" (changeQuestionEvent)="createQuiz(difficulty.value)"></app-quiz>
+</div>

@@ -1,0 +1,10 @@
+<input type="text" [value]="optionSelected" placeholder="Filter by typing" 
+(blur)="eraseFilterData($event)" 
+(keyup)="filterData($event)" (focus)="clearOut()"><br>
+<div class="row" *ngIf="filteredData.length > 0">
+    <div class="col-sm-11" style="padding-left: 0; padding-right: 0;">
+      <ng-container *ngFor="let data of filteredData">
+        <div (click)="selectOption(data)" [innerHTML]="data"></div>
+      </ng-container>
+    </div>
+</div>
