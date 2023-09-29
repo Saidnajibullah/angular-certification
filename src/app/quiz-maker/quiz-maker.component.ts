@@ -13,8 +13,9 @@ export class QuizMakerComponent implements OnInit {
   categories: Category[] = [];
   subCategories: string[] = [];
   questions$!: Observable<Question[]>;
+  questions!: Question[];
   hasSubCategory: boolean = false;
-  selectedCategoryId: any;
+  selectedCategoryId: number = 0;
   constructor(protected quizService: QuizService) {
     this.categories$ = quizService.getAllCategories()
   }
@@ -23,11 +24,12 @@ export class QuizMakerComponent implements OnInit {
   }
 
   createQuiz(difficulty: string): void {
-    this.questions$ = this.quizService.createQuiz(this.selectedCategoryId, difficulty as Difficulty);
+    this.questions$ = this.quizService.createQuiz(this.selectedCategoryId, difficulty as Difficulty, 5);
+    this.questions$.subscribe(questions => this.questions = questions);
   }
   onOptionSelected(option: string){
     const selectedOption = this.categories.find(category => category.name == option);
-    this.selectedCategoryId = selectedOption?.id;
+    if(selectedOption) this.selectedCategoryId = selectedOption?.id;
     this.hasSubCategory = selectedOption?.name.includes(":") ? true : false;
     if(this.hasSubCategory){
       const mainCategoryName = selectedOption?.name.split(":")[0].trim();
@@ -40,5 +42,9 @@ export class QuizMakerComponent implements OnInit {
   }
   getCategoriesName(): string[]{
     return this.categories.map(category => category.name);
+  }
+  changeQuestion(difficulty: string, index: number){
+    const question$: Observable<Question[]> = this.quizService.createQuiz(this.selectedCategoryId, difficulty as Difficulty, 1);
+    question$.subscribe(question => this.questions[index] = question[0])
   }
 }

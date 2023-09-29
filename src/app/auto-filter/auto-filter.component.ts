@@ -16,8 +16,8 @@ export class AutoFilterComponent{
   optionSelected: string = "";
   filteredData: string[] = [];
   optionSelectedEvent: EventEmitter<string> = new EventEmitter();
-  filterData(event: any){
-    const userInput = event.target.value.toLowerCase();
+  filterData(event: KeyboardEvent){
+    const userInput = (event.target as HTMLInputElement).value;
     if(userInput){
       this.filteredData = this.data
       .filter(_data => _data.toLowerCase().includes(userInput))
@@ -31,16 +31,20 @@ export class AutoFilterComponent{
     }
     else this.filteredData = [];
   }
-  eraseFilterData(event: any){
-    if(!event.target.value)
-    this.filteredData = [];
+  eraseFilterData(event: FocusEvent){
+    const data = (event.target as HTMLInputElement).value;
+    if(!data) this.filteredData = [];
   }
   selectOption(data: string){
-    this.optionSelected = data.replaceAll(/<b>/gi, '').replaceAll(/<\/b>/gi, '');
-    this.optionSelectedEvent.emit(this.optionSelected)
+    const optionSelected = data.replaceAll(/<b>/gi, '').replaceAll(/<\/b>/gi, '');
+    this.optionSelected = this.removeSubCategories(optionSelected);
+    this.optionSelectedEvent.emit(optionSelected);
     this.filteredData = [];
   }
   clearOut(){
     this.optionSelected = "";
+  }
+  removeSubCategories(data: string){
+    return data.split(":")[0]
   }
 }

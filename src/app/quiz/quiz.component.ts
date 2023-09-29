@@ -12,7 +12,7 @@ export class QuizComponent {
   canChangeQuestion: boolean = true;
   @Input()
   questions: Question[] | null = [];
-  @Output() changeQuestionEvent: EventEmitter<any> = new EventEmitter();
+  @Output() changeQuestionEvent: EventEmitter<number> = new EventEmitter();
   userAnswers: string[] = [];
   quizService = inject(QuizService);
   router = inject(Router);
@@ -21,8 +21,8 @@ export class QuizComponent {
     this.quizService.computeScore(this.questions ?? [], this.userAnswers);
     this.router.navigateByUrl("/result");
   }
-  changeQuestion(event: boolean){
+  changeQuestion(event: boolean, index: number){
     this.canChangeQuestion = event;
-    this.changeQuestionEvent.emit();
+    this.changeQuestionEvent.emit(index);
   }
 }

@@ -14,5 +14,5 @@
   </div>
 </div>
 <div>
-   <app-quiz [questions]="questions$ | async" (changeQuestionEvent)="createQuiz(difficulty.value)"></app-quiz>
+   <app-quiz [questions]="questions" (changeQuestionEvent)="changeQuestion(difficulty.value, $event)"></app-quiz>
 </div>
